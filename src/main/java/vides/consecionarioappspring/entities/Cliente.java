@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.Set;
 
@@ -16,9 +17,9 @@ import java.util.Set;
 @ToString
 public class Cliente {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long numeroCliente;
-    @Id
     private Long cedula;
     private String nombres;
     private String apellidos;

@@ -31,9 +31,9 @@ public class ClienteController {
     }
 
     @PostMapping("/clientes")
-    public Cliente guardarClientes(@RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> guardarClientes(@RequestBody Cliente cliente){
         logger.info("Cliente a agregar: " + cliente);
-        return clienteService.registrarCliente(cliente);
+        return ResponseEntity.ok(clienteService.registrarCliente(cliente));
     }
 
     @GetMapping("/clientes/{id}")

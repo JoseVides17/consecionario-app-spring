@@ -31,9 +31,14 @@ public class CarroController {
     }
 
     @PostMapping("/carros")
-    public Carro guardarCarros(@RequestBody Carro carro){
+    public ResponseEntity<Carro> guardarCarros(@RequestBody Carro carro){
+        // Validación de datos
+        if (carro == null /* otras condiciones de validación */) {
+            return ResponseEntity.badRequest().build();
+        }
         logger.info("Carro a agregar: " + carro);
-        return carroService.registrarCarro(carro);
+        Carro carroGuardado = carroService.registrarCarro(carro);
+        return ResponseEntity.ok(carroGuardado);
     }
 
     @GetMapping("/carros/{id}")
