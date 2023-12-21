@@ -1,11 +1,17 @@
 package vides.consecionarioappspring.controllers;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vides.consecionarioappspring.entities.Cliente;
 import vides.consecionarioappspring.entities.Cotizacion;
+import vides.consecionarioappspring.entities.Vendedor;
 import vides.consecionarioappspring.exception.RecursoNoEncontradoException;
 import vides.consecionarioappspring.services.cotizacion.CotizacionService;
 
@@ -23,6 +29,9 @@ public class CotizacionController {
     @Autowired
     private CotizacionService cotizacionService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @GetMapping("/cotizaciones")
     public List<Cotizacion> listarCotizaciones(){
         var cotizaciones = cotizacionService.listarCotizaciones();
@@ -31,7 +40,14 @@ public class CotizacionController {
     }
 
     @PostMapping("/cotizaciones")
-    public Cotizacion guardarCotizaciones(@RequestBody Cotizacion cotizacion){
+    @Transactional
+    public Cotizacion guardarCotizacion(@RequestBody Cotizacion cotizacion){
+        Cliente cliente = entityManager.find(Cliente.class, cotizacion.getCliente().getNumeroCliente());
+        Vendedor vendedor = entityManager.find(Vendedor.class, cotizacion.getVendedor().getNumeroVendedor());
+        if (cliente == null || vendedor == null)
+            throw new EntityNotFoundException("Cliente o vendedor inexistente!");
+        cotizacion.setVendedor(vendedor);
+        cotizacion.setCliente(cliente);
         logger.info("Cotizacion a agregar: " + cotizacion);
         return cotizacionService.registrarCotizacion(cotizacion);
     }

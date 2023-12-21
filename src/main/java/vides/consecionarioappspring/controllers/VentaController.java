@@ -1,10 +1,15 @@
 package vides.consecionarioappspring.controllers;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vides.consecionarioappspring.entities.Cliente;
+import vides.consecionarioappspring.entities.Vendedor;
 import vides.consecionarioappspring.entities.Venta;
 import vides.consecionarioappspring.exception.RecursoNoEncontradoException;
 import vides.consecionarioappspring.services.venta.VentaService;
@@ -23,6 +28,9 @@ public class VentaController {
     @Autowired
     private VentaService ventaService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @GetMapping("/ventas")
     public List<Venta> listarVentas(){
         var ventas = ventaService.listarVentas();
@@ -31,7 +39,12 @@ public class VentaController {
     }
 
     @PostMapping("/ventas")
-    public Venta guardarVendedor(@RequestBody Venta venta){
+    @Transactional
+    public Venta guardarVenta(@RequestBody Venta venta){
+        Cliente cliente = entityManager.find(Cliente.class, venta.getCliente().getNumeroCliente());
+        Vendedor vendedor = entityManager.find(Vendedor.class, venta.getVendedor().getNumeroVendedor());
+        venta.setCliente(cliente);
+        venta.setVendedor(vendedor);
         logger.info("Venta a agregar: " + venta);
         return ventaService.registrarVenta(venta);
     }
