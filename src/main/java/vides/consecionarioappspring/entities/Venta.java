@@ -22,11 +22,11 @@ public class Venta {
     private Long idVenta;
     private LocalDate fechaVenta;
     private Double valorVenta;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vendedor_id")
     private Vendedor vendedor;
 

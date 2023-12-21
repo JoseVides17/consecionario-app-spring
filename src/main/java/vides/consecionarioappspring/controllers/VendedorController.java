@@ -32,7 +32,7 @@ public class VendedorController {
 
     @PostMapping("/vendedores")
     public Vendedor guardarVendedor(@RequestBody Vendedor vendedor){
-        logger.info("Cliente a agregar: " + vendedor);
+        logger.info("Vendedor a agregar: " + vendedor);
         return vendedorService.registrarVendedor(vendedor);
     }
 

@@ -16,9 +16,9 @@ import java.util.Set;
 @ToString
 public class Vendedor {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long numeroVendedor;
-    @Id
     private Long identificacion;
     private String nombres;
     private String apellidos;

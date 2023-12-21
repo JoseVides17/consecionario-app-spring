@@ -22,11 +22,11 @@ public class Cotizacion {
     private String detalles;
     private LocalDate fecha;
     private Double valor;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vendedor_id")
     private Vendedor vendedor;
 
